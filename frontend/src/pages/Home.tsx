@@ -58,11 +58,14 @@ const Home = () => {
             </div>
           </div>
           <div className="md:w-1/2 flex justify-center md:justify-end">
-            <div className="relative w-full max-w-md aspect-square rounded-2xl bg-gradient-to-tr from-slate-800 to-slate-700 p-8 shadow-2xl border border-slate-700 transform rotate-2 hover:rotate-0 transition-transform duration-500">
+            <div className="relative w-full max-w-md aspect-square rounded-2xl bg-gradient-to-tr from-slate-800 to-slate-700 p-2 sm:p-4 shadow-2xl border border-slate-700 transform rotate-2 hover:rotate-0 transition-transform duration-500">
               <div className="absolute inset-0 bg-white/5 rounded-2xl backdrop-blur-sm"></div>
-              <div className="w-full h-full border border-slate-600/50 rounded-xl flex items-center justify-center flex-col text-slate-400 bg-slate-900/50">
-                 <ShoppingBag className="w-20 h-20 mb-4 opacity-50" />
-                 <span className="font-medium tracking-widest uppercase">Nova Collection</span>
+              <div className="relative w-full h-full border border-slate-600/50 rounded-xl overflow-hidden bg-slate-900">
+                <img 
+                  src="/images/hero-tech.png" 
+                  alt="Nova Tech Collection" 
+                  className="w-full h-full object-cover object-center"
+                />
               </div>
             </div>
           </div>
