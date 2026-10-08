@@ -1,0 +1,27 @@
+spring:
+  datasource:
+    url: jdbc:postgresql://localhost:5433/ecommerce_db
+    username: ecommerce_user
+    password: ecommerce_pass
+  sql:
+    init:
+      mode: never
+  jpa:
+    hibernate:
+      ddl-auto: validate
+app:
+  cors:
+    allowed-origins: http://localhost:5173
+  jwt:
+    secret: ${random.uuid}${random.uuid}
+    expiration-ms: 900000
+    refresh-expiration-ms: 604800000
+
+
+
+vnpay:
+  tmn-code: TEST_TMN_CODE
+  hash-secret: TEST_HASH_SECRET_VERY_LONG_STRING_1234567890
+  url: http://sandbox.vnpayment.vn/paymentv2/vpcpay.html
+  return-url: http://localhost:8081/api/payments/vnpay/return
+  ipn-url: http://localhost:8081/api/payments/vnpay/ipn
