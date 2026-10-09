@@ -56,7 +56,7 @@ public class PaymentService {
 
         String paymentRef = existingPaymentOpt
                 .map(Payment::getPaymentRef)
-                .orElse(UUID.randomUUID().toString());
+                .orElse(UUID.randomUUID().toString().replace("-", ""));
 
         Payment payment = existingPaymentOpt.orElse(new Payment());
         payment.setOrder(order);
@@ -94,8 +94,9 @@ public class PaymentService {
         vnp_Params.put("vnp_ReturnUrl", vnpayConfig.getVnpayReturnUrl());
         vnp_Params.put("vnp_IpAddr", vnp_IpAddr);
 
-        Calendar cld = Calendar.getInstance(TimeZone.getTimeZone("Etc/GMT+7"));
+        Calendar cld = Calendar.getInstance(TimeZone.getTimeZone("Asia/Ho_Chi_Minh"));
         SimpleDateFormat formatter = new SimpleDateFormat("yyyyMMddHHmmss");
+        formatter.setTimeZone(TimeZone.getTimeZone("Asia/Ho_Chi_Minh"));
         String vnp_CreateDate = formatter.format(cld.getTime());
         vnp_Params.put("vnp_CreateDate", vnp_CreateDate);
         

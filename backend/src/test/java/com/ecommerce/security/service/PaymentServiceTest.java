@@ -159,5 +159,45 @@ public class PaymentServiceTest {
         assertEquals("04", response.get("RspCode"));
         assertEquals("Invalid amount", response.get("Message"));
     }
+
+    @Test
+    void testCreatePayment_TxnRef_And_Dates() throws Exception {
+        when(orderRepository.findById(10L)).thenReturn(Optional.of(order));
+        when(paymentRepository.findByOrder_Id(10L)).thenReturn(Optional.empty());
+
+        PaymentUrlResponseDTO response1 = paymentService.createPayment(1L, 10L, "127.0.0.1");
+        PaymentUrlResponseDTO response2 = paymentService.createPayment(1L, 10L, "127.0.0.1");
+
+        String url1 = response1.getPaymentUrl();
+        String url2 = response2.getPaymentUrl();
+
+        // Extract vnp_TxnRef
+        String txnRef1 = url1.replaceAll(".*vnp_TxnRef=([^&]*).*", "$1");
+        String txnRef2 = url2.replaceAll(".*vnp_TxnRef=([^&]*).*", "$1");
+
+        // Ensure unique
+        assertNotEquals(txnRef1, txnRef2);
+        
+        // Ensure alphanumeric only (no hyphens)
+        assertTrue(txnRef1.matches("^[a-zA-Z0-9]+$"), "TxnRef must be alphanumeric");
+
+        // Extract Dates
+        String createDateStr = url1.replaceAll(".*vnp_CreateDate=([^&]*).*", "$1");
+        String expireDateStr = url1.replaceAll(".*vnp_ExpireDate=([^&]*).*", "$1");
+
+        java.text.SimpleDateFormat formatter = new java.text.SimpleDateFormat("yyyyMMddHHmmss");
+        formatter.setTimeZone(java.util.TimeZone.getTimeZone("Asia/Ho_Chi_Minh"));
+        
+        java.util.Date createDate = formatter.parse(createDateStr);
+        java.util.Date expireDate = formatter.parse(expireDateStr);
+        
+        long diff = expireDate.getTime() - createDate.getTime();
+        assertEquals(15 * 60 * 1000, diff, "Expire date must be exactly 15 minutes after Create date");
+        
+        // Ensure it's reasonably close to current time in GMT+7
+        java.util.Calendar nowGmt7 = java.util.Calendar.getInstance(java.util.TimeZone.getTimeZone("Asia/Ho_Chi_Minh"));
+        long nowDiff = Math.abs(createDate.getTime() - nowGmt7.getTimeInMillis());
+        assertTrue(nowDiff < 5000, "CreateDate must be current time in GMT+7 timezone");
+    }
 }
 
