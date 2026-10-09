@@ -115,7 +115,11 @@ public class OrderService {
                 order.getOrderNumber(),
                 order.getTotalAmount(),
                 order.getStatus(),
-                order.getCreatedAt() != null ? order.getCreatedAt().toString() : null
+                order.getCreatedAt() != null ? order.getCreatedAt().toString() : null,
+                order.getShippingStreet(),
+                order.getShippingCity(),
+                order.getShippingZip(),
+                order.getShippingCountry()
         );
     }
 
