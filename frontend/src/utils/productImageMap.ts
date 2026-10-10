@@ -20,3 +20,21 @@ export const getProductImage = (productId: number | string | undefined): string 
 
   return imageMap[id] || '/products/fallback.jpg';
 };
+
+export const getProductImages = (productId: number | string | undefined): string[] => {
+  const mainImage = getProductImage(productId);
+  if (!productId) return [mainImage];
+  
+  const id = Number(productId);
+  
+  if (id === 23) {
+    return [
+      '/products/product-23.jpg',
+      '/products/product-23-2.jpg',
+      '/products/product-23-3.jpg',
+      '/products/product-23-4.jpg',
+    ];
+  }
+  
+  return [mainImage];
+};

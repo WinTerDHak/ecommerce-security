@@ -4,7 +4,7 @@ import { apiClient } from '../api/client';
 import type { Product } from '../types';
 import { useAuth } from '../context/AuthContext';
 import { ShieldCheck, Truck, ShoppingCart, CheckCircle, ChevronRight, ShoppingBag } from 'lucide-react';
-import { getProductImage } from '../utils/productImageMap';
+import { getProductImage, getProductImages } from '../utils/productImageMap';
 import { formatVND } from '../utils/formatCurrency';
 
 
@@ -14,6 +14,7 @@ const ProductDetail = () => {
   const [loading, setLoading] = useState(true);
   const [addingToCart, setAddingToCart] = useState(false);
   const [quantity, setQuantity] = useState(1);
+  const [selectedImageIdx, setSelectedImageIdx] = useState(0);
   const [error, setError] = useState('');
   
   const { isAuthenticated } = useAuth();
@@ -91,7 +92,7 @@ const ProductDetail = () => {
         <div className="lg:w-1/2">
           <div className="aspect-square bg-slate-50 rounded-2xl border border-slate-100 flex items-center justify-center mb-6 overflow-hidden">
             <img 
-              src={getProductImage(product.id)} 
+              src={getProductImages(product.id)[selectedImageIdx] || getProductImage(product.id)} 
               alt={product.name} 
               className="w-full h-full object-cover"
               onError={(e) => {
@@ -104,15 +105,18 @@ const ProductDetail = () => {
           </div>
           <div className="grid grid-cols-4 gap-4">
              {/* Thumbnail placeholders */}
-             {[1, 2, 3, 4].map(i => (
-                <div key={i} className={`aspect-square rounded-xl flex items-center justify-center border-2 cursor-pointer transition-all overflow-hidden ${i === 1 ? 'border-primary-500 bg-white' : 'border-slate-100 bg-slate-50 hover:border-slate-300'}`}>
-                  {i === 1 ? (
-                    <img src={getProductImage(product.id)} alt={product.name} className="w-full h-full object-cover" />
+             {[0, 1, 2, 3].map(i => {
+                const images = getProductImages(product.id);
+                const imgSrc = images[i];
+                return (
+                <div key={i} onClick={() => imgSrc && setSelectedImageIdx(i)} className={`aspect-square rounded-xl flex items-center justify-center border-2 cursor-pointer transition-all overflow-hidden ${selectedImageIdx === i ? 'border-primary-500 bg-white' : 'border-slate-100 bg-slate-50 hover:border-slate-300'}`}>
+                  {imgSrc ? (
+                    <img src={imgSrc} alt={product.name} className="w-full h-full object-cover" />
                   ) : (
                     <ShoppingBag className={`w-8 h-8 text-slate-200`} />
                   )}
                 </div>
-             ))}
+             )})}
           </div>
         </div>
 
