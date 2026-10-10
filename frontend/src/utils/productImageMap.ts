@@ -14,9 +14,8 @@ export const getProductImage = (productId: number | string | undefined): string 
     7: '/products/product-7.jpg',   // Running Shoes
     8: '/products/product-8.jpg',   // Coffee Maker
     9: '/products/product-9.jpg',   // Blender
-    10: '/products/product-23.jpg', // Yoga Mat (Prod)
+    10: '/products/product-10.jpg', // Yoga Mat
     11: '/products/product-11.jpg', // Dumbbell Set
-    23: '/products/product-23.jpg', // Yoga Mat (Local)
   };
 
   return imageMap[id] || '/products/fallback.jpg';
@@ -25,17 +24,6 @@ export const getProductImage = (productId: number | string | undefined): string 
 export const getProductImages = (productId: number | string | undefined): string[] => {
   const mainImage = getProductImage(productId);
   if (!productId) return [mainImage];
-  
-  const id = Number(productId);
-  
-  if (id === 10 || id === 23) {
-    return [
-      '/products/product-23.jpg',
-      '/products/product-23-2.jpg',
-      '/products/product-23-3.jpg',
-      '/products/product-23-4.jpg',
-    ];
-  }
   
   return [mainImage];
 };
